@@ -32,12 +32,13 @@ public class CursoService {
 
     }
 
-/*    public List<CriacaoProfessorRespostaDTO> listarCursos() throws SQLException{
-        return repository.listarCursos().stream()
-                .map(mapper::paraRespostaDTO)
-                .toList();
 
-    }*/
+//   public List<CriacaoProfessorRespostaDTO> listarCursos() throws SQLException{
+//        return repository.listarCursos().stream()
+//                .map(mapper::paraRespostaDTO)
+//                .toList();
+//
+//    }
 
 }
 
