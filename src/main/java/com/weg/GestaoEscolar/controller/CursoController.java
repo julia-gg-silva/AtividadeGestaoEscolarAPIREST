@@ -5,10 +5,7 @@ import com.weg.GestaoEscolar.dto.curso.CriacaoCursoRespostaDTO;
 import com.weg.GestaoEscolar.service.CursoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,4 +35,49 @@ public class CursoController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<CriacaoCursoRespostaDTO>> listarCursos(){
+        try{
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.buscarTodos());
+        }catch (Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CriacaoCursoRespostaDTO> buscarCursoPorId(@PathVariable int id){
+        try{
+          return ResponseEntity.status(HttpStatus.OK)
+                  .body(service.buscarCursoPorId(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CriacaoCursoRespostaDTO> atualizarCurso
+            (@PathVariable int id, @RequestBody CriacaoCursoRequisicaoDTO requisicaoDTO){
+        try{
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.atualizarCurso(id, requisicaoDTO));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCurso(@PathVariable int id){
+        try{
+            service.deletarCurso(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .build();
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
 }
