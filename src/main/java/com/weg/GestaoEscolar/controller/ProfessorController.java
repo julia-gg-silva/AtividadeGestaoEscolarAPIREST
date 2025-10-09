@@ -5,6 +5,7 @@ import com.weg.GestaoEscolar.dto.aluno.CriacaoAlunoRespostaDTO;
 import com.weg.GestaoEscolar.dto.professor.CriacaoProfessorRequisicaoDTO;
 import com.weg.GestaoEscolar.dto.professor.CriacaoProfessorRespostaDTO;
 import com.weg.GestaoEscolar.service.ProfessorService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class ProfessorController {
 
     @PostMapping
     public ResponseEntity<CriacaoProfessorRespostaDTO> criarProfessor(
-            @RequestBody CriacaoProfessorRequisicaoDTO requisicaoDTO) {
+           @Valid @RequestBody CriacaoProfessorRequisicaoDTO requisicaoDTO) {
 
         try {
             return ResponseEntity.status(HttpStatus.CREATED)

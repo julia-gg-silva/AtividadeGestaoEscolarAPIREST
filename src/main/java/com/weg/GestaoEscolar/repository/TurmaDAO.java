@@ -2,6 +2,7 @@ package com.weg.GestaoEscolar.repository;
 
 import com.weg.GestaoEscolar.database.Conexao;
 import com.weg.GestaoEscolar.model.Curso;
+import com.weg.GestaoEscolar.model.Turma;
 import com.weg.GestaoEscolar.util.gerarIn;
 import org.springframework.stereotype.Repository;
 
@@ -10,30 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CursoDAO {
+public class TurmaDAO {
 
-    public Curso criarCurso(Curso curso) throws SQLException {
-        String query = "INSERT INTO curso(nome, codigo) VALUES(?,?)";
+    public Turma criarTurma(Turma turma) throws SQLException {
+        String query = "INSERT INTO turma(nome, curso_id, professor_id) VALUES(?,?,?)";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, curso.getNome());
-            stmt.setString(2, curso.getCodigo());
+            stmt.setString(1, turma.getNome());
+            stmt.setInt(2, turma.getCurso_id());
+            stmt.setInt(3, turma.getProfessor_id());
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
 
             if (rs.next()) {
-                curso.setId(rs.getInt(1));
+                turma.setId(rs.getInt(1));
             }
         }
-        return curso;
+        return turma;
     }
 
-    public List<Curso> listarCursos() throws SQLException {
-        String query = "SELECT id, nome, codigo FROM curso";
-        List<Curso> cursos = new ArrayList<>();
+    public List<Turma> listarTurmas() throws SQLException {
+        String query = "SELECT id, nome, curso_id, professor_id FROM turma";
+        List<Turma> turmas = new ArrayList<>();
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -43,19 +45,20 @@ public class CursoDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nome = rs.getString("nome");
-                String codigo = rs.getString("codigo");
+                int cursoId = rs.getInt("curso_id");
+                int professorId = rs.getInt("professor_id");
 
-                Curso curso = new Curso(id, nome, codigo);
-                cursos.add(curso);
+                Turma turma = new Turma(id, nome, cursoId, professorId);
+                turmas.add(turma);
             }
 
         }
-        return cursos;
+        return turmas;
     }
 
-    public Curso buscarCursosPorId(int id) throws SQLException {
-        String query = "SELECT id, nome, codigo FROM curso WHERE id = ?";
-        Curso curso = null;
+    public Turma buscarTurmasPorId(int id) throws SQLException {
+        String query = "SELECT id, nome, curso_id, professor_id FROM turma WHERE id = ?";
+        Turma turma = null;
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -67,30 +70,32 @@ public class CursoDAO {
             if (rs.next()) {
                 int newId = rs.getInt("id");
                 String nome = rs.getString("nome");
-                String codigo = rs.getString("codigo");
+                int cursoId = rs.getInt("curso_id");
+                int professorId = rs.getInt("professor_id");
 
-                curso = new Curso(newId, nome, codigo);
+                turma = new Turma(newId, nome, cursoId, professorId);
             }
         }
-        return curso;
+        return turma;
     }
 
-    public Curso atualizarCurso(int id, Curso curso) throws SQLException {
-        String query = "UPDATE curso SET nome = ?, codigo = ? WHERE id = ?";
+    public Turma atualizarTurma(int id, Turma turma) throws SQLException {
+        String query = "UPDATE turma SET nome = ?, curso_id = ?, professor_id = ? WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, curso.getNome());
-            stmt.setString(2, curso.getCodigo());
+            stmt.setString(1, turma.getNome());
+            stmt.setInt(2, turma.getCurso_id());
+            stmt.setInt(3, turma.getProfessor_id());
             stmt.setInt(3, id);
             stmt.executeUpdate();
         }
-        return curso;
+        return turma;
     }
 
-    public void deletarCurso(int id) throws SQLException {
-        String query = "DELETE FROM curso WHERE id = ?";
+    public void deletarTurma(int id) throws SQLException {
+        String query = "DELETE FROM turma WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -101,8 +106,8 @@ public class CursoDAO {
         }
     }
 
-    public boolean cursoExiste(int id) throws SQLException {
-        String query = "SELECT id, nome, codigo FROM curso WHERE id = ?";
+    public boolean turmaExiste(int id) throws SQLException {
+        String query = "SELECT id, nome, curso_id, professor_id FROM turma WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -119,13 +124,13 @@ public class CursoDAO {
     }
 
     //Lista de professores que estão associadas ao curso
-    public List<String> listaProfessorNome(List<Integer> idsProfessores) throws SQLException {
+    public List<String> listaAlunosIds(List<Integer> idsAlunos) throws SQLException {
         String query = """
                 SELECT p.nome
-                FROM professor p
+                FROM alunos a
                 LEFT JOIN turma t
-                ON p.id = t.professor_id
-                WHERE p.id IN """+ gerarIn.gerando(idsProfessores.size());
+                ON a.id = t.professor_id
+                WHERE p.id IN """ + gerarIn.gerando(idsAlunos.size());
 
 
         List<String> nomeProfessores = new ArrayList<>();
@@ -134,19 +139,18 @@ public class CursoDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
             String nome = "";
 
-            for(int i = 0; i < idsProfessores.size(); i++){
-                stmt.setInt(i + 1, idsProfessores.get(i));
+            for (int i = 0; i < idsAlunos.size(); i++) {
+                stmt.setInt(i + 1, idsAlunos.get(i));
             }
 
             ResultSet rs = stmt.executeQuery();
 
-            while(rs.next()) {
-               nome = rs.getString("nome");
-               nomeProfessores.add(nome);
+            while (rs.next()) {
+                nome = rs.getString("nome");
+                nomeProfessores.add(nome);
             }
 
         }
         return nomeProfessores;
     }
 }
-

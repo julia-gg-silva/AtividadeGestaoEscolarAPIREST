@@ -3,6 +3,7 @@ package com.weg.GestaoEscolar.controller;
 import com.weg.GestaoEscolar.dto.curso.CriacaoCursoRequisicaoDTO;
 import com.weg.GestaoEscolar.dto.curso.CriacaoCursoRespostaDTO;
 import com.weg.GestaoEscolar.service.CursoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class CursoController {
 
     @PostMapping
     public ResponseEntity<CriacaoCursoRespostaDTO> criarCurso(
-            @RequestBody CriacaoCursoRequisicaoDTO requisicaoDTO){
+            @Valid @RequestBody CriacaoCursoRequisicaoDTO requisicaoDTO){
 
         try{
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -41,6 +42,7 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(service.buscarTodos());
         }catch (Exception e){
+            e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();
         }
@@ -52,6 +54,7 @@ public class CursoController {
           return ResponseEntity.status(HttpStatus.OK)
                   .body(service.buscarCursoPorId(id));
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
@@ -64,6 +67,7 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(service.atualizarCurso(id, requisicaoDTO));
         }catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }

@@ -6,6 +6,20 @@ public class Turma {
     private int curso_id;
     private int professor_id;
 
+
+    public Turma(int id, String nome, int curso_id, int professor_id) {
+        this.id = id;
+        this.nome = nome;
+        this.curso_id = curso_id;
+        this.professor_id = professor_id;
+    }
+
+    public Turma(String nome, int curso_id, int professor_id) {
+        this.nome = nome;
+        this.curso_id = curso_id;
+        this.professor_id = professor_id;
+    }
+
     public int getId() {
         return id;
     }

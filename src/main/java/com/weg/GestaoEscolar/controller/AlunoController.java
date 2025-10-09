@@ -4,6 +4,7 @@ import com.weg.GestaoEscolar.dto.aluno.CriacaoAlunoRequisicaoDTO;
 import com.weg.GestaoEscolar.dto.aluno.CriacaoAlunoRespostaDTO;
 import com.weg.GestaoEscolar.model.Aluno;
 import com.weg.GestaoEscolar.service.AlunoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AlunoController {
 
     @PostMapping
     public ResponseEntity<CriacaoAlunoRespostaDTO> criarAluno(
-            @RequestBody CriacaoAlunoRequisicaoDTO requisicaoDTO){
+            @Valid @RequestBody CriacaoAlunoRequisicaoDTO requisicaoDTO){
         try{
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(service.criarAluno(requisicaoDTO));
