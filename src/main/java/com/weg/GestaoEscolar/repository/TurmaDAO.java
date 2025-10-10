@@ -3,6 +3,7 @@ package com.weg.GestaoEscolar.repository;
 import com.weg.GestaoEscolar.database.Conexao;
 import com.weg.GestaoEscolar.model.Curso;
 import com.weg.GestaoEscolar.model.Turma;
+import com.weg.GestaoEscolar.model.TurmaResposta;
 import com.weg.GestaoEscolar.util.gerarIn;
 import org.springframework.stereotype.Repository;
 
@@ -56,9 +57,22 @@ public class TurmaDAO {
         return turmas;
     }
 
-    public Turma buscarTurmasPorId(int id) throws SQLException {
-        String query = "SELECT id, nome, curso_id, professor_id FROM turma WHERE id = ?";
-        Turma turma = null;
+    public TurmaResposta buscarTurmasPorId(int id) throws SQLException {
+        String query = """
+                        SELECT t.id
+                        , t.nome
+                        , t.curso_id
+                        , t.professor_id
+                        , p.nome as professor
+                        , c.nome as curso
+                        FROM turma t 
+                        LEFT JOIN professor p 
+                        ON  t.professor_id = p.id
+                        LEFT JOIN curso c
+                        ON c.id = t.curso_id
+                        WHERE t.id = ?
+                        """;
+        TurmaResposta turmaResposta = null;
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -72,11 +86,14 @@ public class TurmaDAO {
                 String nome = rs.getString("nome");
                 int cursoId = rs.getInt("curso_id");
                 int professorId = rs.getInt("professor_id");
+                String nomeProfessor = rs.getString("professor");
+                String nomeCurso = rs.getString("curso");
 
-                turma = new Turma(newId, nome, cursoId, professorId);
+                var turma = new Turma(newId, nome, cursoId, professorId);
+                turmaResposta = new TurmaResposta(turma,nomeProfessor, nomeCurso);
             }
         }
-        return turma;
+        return turmaResposta;
     }
 
     public Turma atualizarTurma(int id, Turma turma) throws SQLException {
@@ -124,16 +141,14 @@ public class TurmaDAO {
     }
 
     //Lista de professores que estão associadas ao curso
-    public List<String> listaAlunosIds(List<Integer> idsAlunos) throws SQLException {
+    public List<String> buscarListaNomesPorId(List<Integer> idsAlunos) throws SQLException {
         String query = """
-                SELECT p.nome
-                FROM alunos a
-                LEFT JOIN turma t
-                ON a.id = t.professor_id
-                WHERE p.id IN """ + gerarIn.gerando(idsAlunos.size());
+                SELECT nome
+                FROM aluno 
+                WHERE id IN """ + gerarIn.gerando(idsAlunos.size());
 
 
-        List<String> nomeProfessores = new ArrayList<>();
+        List<String> nomeAlunos = new ArrayList<>();
 
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -147,10 +162,52 @@ public class TurmaDAO {
 
             while (rs.next()) {
                 nome = rs.getString("nome");
-                nomeProfessores.add(nome);
+                nomeAlunos.add(nome);
             }
 
         }
-        return nomeProfessores;
+        return nomeAlunos;
+    }
+
+    public void inserirAlunosTurma(int idTurma, List<Integer> idAlunos )throws SQLException{
+        String query = """
+                INSERT INTO turma_aluno
+                (turma_id, aluno_id)
+                VALUES
+                (?,?)
+                """;
+
+        for(Integer idAluno : idAlunos){
+            try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)){
+                stmt.setInt(1,idTurma);
+                stmt.setInt(2,idAluno);
+                stmt.executeUpdate();
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

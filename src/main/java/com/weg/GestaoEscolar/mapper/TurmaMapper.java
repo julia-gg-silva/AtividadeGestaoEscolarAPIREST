@@ -4,6 +4,7 @@ import com.weg.GestaoEscolar.dto.curso.CriacaoCursoRequisicaoDTO;
 import com.weg.GestaoEscolar.dto.turma.CriacaoTurmaRequisicaoDTO;
 import com.weg.GestaoEscolar.dto.turma.CriacaoTurmaRespostaDTO;
 import com.weg.GestaoEscolar.model.Turma;
+import com.weg.GestaoEscolar.model.TurmaResposta;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,8 +16,8 @@ public class TurmaMapper {
         return new Turma(requisicaoDTO.nome(), requisicaoDTO.cursoId(), requisicaoDTO.professorId());
     }
 
-    public CriacaoTurmaRespostaDTO paraRespostaDTO(Turma turma, List<String> nomeAlunos) {
-        return new CriacaoTurmaRespostaDTO(turma.getId(), turma.getNome(), turma.getCurso_id(), turma.getProfessor_id(), nomeAlunos);
+    public CriacaoTurmaRespostaDTO paraRespostaDTO(TurmaResposta turma, List<String> nomeAlunos) {
+        return new CriacaoTurmaRespostaDTO(turma.getId(), turma.getNome(), turma.getNomeCurso(), turma.getNomeProfessor(), nomeAlunos);
     }
 
     public Turma paraUpdate(CriacaoTurmaRequisicaoDTO requisicaoDTO, Turma turma){

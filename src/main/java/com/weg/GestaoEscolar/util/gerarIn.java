@@ -1,5 +1,13 @@
 package com.weg.GestaoEscolar.util;
 
+
+
+
+
+
+
+
+
 public class gerarIn {
     public static String gerando(int size){
         StringBuilder sql = new StringBuilder("(");

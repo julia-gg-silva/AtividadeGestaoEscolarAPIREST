@@ -5,8 +5,8 @@ import java.util.List;
 public record CriacaoTurmaRespostaDTO(
         int id,
         String nome,
-        int cursoId,
-        int professorID,
+        String nomeCurso,
+        String nomeProfessor,
         List<String> nomeAlunos
 ) {
 }
