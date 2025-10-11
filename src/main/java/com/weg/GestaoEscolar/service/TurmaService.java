@@ -9,6 +9,7 @@ import com.weg.GestaoEscolar.repository.TurmaDAO;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,4 +37,14 @@ public class TurmaService {
         return mapper.paraRespostaDTO(turmaResposta,nomeAlunos);
     }
 
+    public List<CriacaoTurmaRespostaDTO> buscarTurmas() throws SQLException{
+        List <TurmaResposta> turmas = repository.buscarTurmas();
+        List<CriacaoTurmaRespostaDTO> respostaDTOS = new ArrayList<>();
+
+        for(TurmaResposta turma : turmas){
+            List<String> nomeAlunos = repository.buscarListaNomeAlunosPorTurma(turma.getId());
+            respostaDTOS.add(mapper.paraRespostaDTO(turma,nomeAlunos));
+        }
+        return respostaDTOS;
+    }
 }

@@ -38,17 +38,17 @@ public class TurmaController {
     }
 
 
-//    @GetMapping
-//    public ResponseEntity<List<CriacaoTurmaRespostaDTO>> buscarTodos() {
-//        try {
-//            return ResponseEntity.status(HttpStatus.OK)
-//                    .body(service.buscarTodos());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .build();
-//        }
-//    }
+    @GetMapping
+    public ResponseEntity<List<CriacaoTurmaRespostaDTO>> buscarTodos() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.buscarTurmas());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
 
 //    @GetMapping("/{id}")
 //    public ResponseEntity<CriacaoTurmaRespostaDTO> buscarTurmaPorId(
