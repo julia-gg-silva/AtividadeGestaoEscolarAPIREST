@@ -50,45 +50,45 @@ public class TurmaController {
         }
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<CriacaoTurmaRespostaDTO> buscarTurmaPorId(
-//            @PathVariable int id) {
-//        try {
-//            return ResponseEntity.status(HttpStatus.OK)
-//                    .body(service.buscarTurmaPorId(id));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .build();
-//        }
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<CriacaoTurmaRespostaDTO> atualizarTurma(
-//            @PathVariable int id, @Valid @RequestBody CriacaoTurmaRequisicaoDTO requisicaoDTO
-//    ) {
-//        try {
-//            return ResponseEntity.status(HttpStatus.OK)
-//                    .body(service.atualizarTurma(id, requisicaoDTO));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .build();
-//        }
-//    }
-//
-//    @DeleteMapping
-//    public ResponseEntity<Void> deletarTurma(
-//            @PathVariable int id
-//    ){
-//        try {
-//            service.deletarTurma(id);
-//            return ResponseEntity.status(HttpStatus.OK)
-//                    .build();
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .build();
-//        }
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<CriacaoTurmaRespostaDTO> buscarTurmaPorId(
+            @PathVariable int id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.buscarTurmaPorId(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CriacaoTurmaRespostaDTO> atualizarTurma(
+            @PathVariable int id, @Valid @RequestBody CriacaoTurmaRequisicaoDTO requisicaoDTO
+    ) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(service.atualizarTurma(id, requisicaoDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deletarTurma(
+            @PathVariable int id
+    ){
+        try {
+            service.deletarTurma(id);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
     }
 
 

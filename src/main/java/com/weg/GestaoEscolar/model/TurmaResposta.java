@@ -1,23 +1,4 @@
 package com.weg.GestaoEscolar.model;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public class TurmaResposta extends Turma{
     private String nomeProfessor;
     private String nomeCurso;

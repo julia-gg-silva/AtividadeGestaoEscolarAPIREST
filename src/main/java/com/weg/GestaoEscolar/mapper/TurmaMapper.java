@@ -20,7 +20,7 @@ public class TurmaMapper {
         return new CriacaoTurmaRespostaDTO(turma.getId(), turma.getNome(), turma.getNomeCurso(), turma.getNomeProfessor(), nomeAlunos);
     }
 
-    public Turma paraUpdate(CriacaoTurmaRequisicaoDTO requisicaoDTO, Turma turma){
+    public Turma paraUpdate(CriacaoTurmaRequisicaoDTO requisicaoDTO, TurmaResposta turma){
 
         if(requisicaoDTO.nome() != turma.getNome() && requisicaoDTO.nome() != null){
             turma.setNome(requisicaoDTO.nome());
