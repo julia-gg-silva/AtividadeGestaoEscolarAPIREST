@@ -68,6 +68,15 @@ public class AulaService {
         String nomeTurma = repository.buscarNomeTurmaPorId(newAula.getIdTurma());
 
         return mapper.paraRespostaDTO(newAula, nomeTurma);
+    }
 
+    public void deletarAula(int id) throws SQLException{
+        Aula aula = repository.bucarAulaPorId(id);
+
+        if(aula == null){
+            throw new AulaNaoEncontradaException();
+        }
+
+        repository.deletarAula(id);
     }
 }

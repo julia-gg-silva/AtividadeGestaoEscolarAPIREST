@@ -1,8 +1,8 @@
 package com.weg.GestaoEscolar.controller;
 
-import com.weg.GestaoEscolar.dto.aula.CriacaoAulaRequisicaoDTO;
-import com.weg.GestaoEscolar.dto.aula.CriacaoAulaRespostaDTO;
-import com.weg.GestaoEscolar.service.AulaService;
+import com.weg.GestaoEscolar.dto.nota.CriacaoNotaRequisicaoDTO;
+import com.weg.GestaoEscolar.dto.nota.CriacaoNotaRespostaDTO;
+import com.weg.GestaoEscolar.service.NotaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,23 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/aulas")
-public class AulaController {
+@RequestMapping("/notas")
+public class NotaController {
 
-    private final AulaService service;
+    private final NotaService service;
 
-
-    public AulaController(AulaService service) {
+    public NotaController(NotaService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<CriacaoAulaRespostaDTO> criarAula(
-            @Valid @RequestBody CriacaoAulaRequisicaoDTO requisicaoDTO
+    public ResponseEntity<CriacaoNotaRespostaDTO> criarNota(
+            @Valid @RequestBody CriacaoNotaRequisicaoDTO requisicaoDTO
     ) {
+
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(service.criarAula(requisicaoDTO));
+                    .body(service.criarNota(requisicaoDTO));
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -37,10 +38,10 @@ public class AulaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CriacaoAulaRespostaDTO>> buscarAulas() {
+    public ResponseEntity<List<CriacaoNotaRespostaDTO>> buscarNotas() {
         try {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(service.buscarAulas());
+                    .body(service.buscarNotas());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,12 +50,12 @@ public class AulaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CriacaoAulaRespostaDTO> buscarAulasPorId(
+    public ResponseEntity<CriacaoNotaRespostaDTO> buscarNotaPorId(
             @PathVariable int id
     ) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(service.buscarAulaPorId(id));
+                    .body(service.buscarNotaPorId(id));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -63,12 +64,13 @@ public class AulaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CriacaoAulaRespostaDTO> atualizarAula(
-            @PathVariable int id, @Valid @RequestBody CriacaoAulaRequisicaoDTO requisicaoDTO
+    public ResponseEntity<CriacaoNotaRespostaDTO> atualizarNota(
+            @PathVariable int id, @Valid @RequestBody CriacaoNotaRequisicaoDTO requisicaoDTO
     ) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(service.atualizarAula(id, requisicaoDTO));
+                    .body(service.atualizarNota(id, requisicaoDTO));
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -77,18 +79,16 @@ public class AulaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAula(
-            @PathVariable int id
-    ) {
-        try {
-            service.deletarAula(id);
+    public ResponseEntity<Void> deletarNota(@PathVariable int id){
+        try{
+            service.deletarNota(id);
             return ResponseEntity.status(HttpStatus.OK)
                     .build();
-        } catch (Exception e) {
+
+        }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .build();
         }
     }
-
 }
